@@ -1,206 +1,163 @@
 <div align="center">
 
-# 🎬 Motion Video Director
+# Motion Video Director
 
-### Turn your AI coding agent into a full motion-design studio *and* a pro video editor.
+**A Claude Code skill for motion graphics and video editing.**
 
-**One prompt → story, voiceover script, 2D/3D motion graphics, raw-footage edits, captions, sound design and a final render. Everything runs on your own machine.**
+Plan, animate, edit, voice and sound-design complete videos with Claude Code, Codex or Cursor. Everything renders locally, with no After Effects or Premiere.
 
-[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](#-install-in-30-seconds)
-[![Works with](https://img.shields.io/badge/Works%20with-Codex%20·%20Cursor%20·%20VS%20Code-111827?style=for-the-badge)](#other-agents-codex-cursor-claude-desktop-vs-code)
-[![Version](https://img.shields.io/badge/version-3.0.0-2563EB?style=for-the-badge)](#changelog)
-[![Instagram](https://img.shields.io/badge/Follow-@miftahul__islam__efaz-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/miftahul_islam_efaz/)
+<img src="assets/hero.gif" alt="Laptop reveal animation rendered entirely in code by Claude Code" width="760">
 
-<img src="assets/hero.gif" alt="Motion Video Director: laptop reveal made 100% in code" width="760">
-
-<sub>☝️ Every frame above was drawn in code by an AI agent running this skill. No After Effects, no templates.</sub>
+<sub>Every frame above was written and rendered by Claude Code using this skill.</sub>
 
 </div>
 
----
+## Overview
 
-## ✨ What is this?
+Motion Video Director turns a coding agent into a video production team. It handles the work a motion designer, editor and sound designer would normally do:
 
-**Motion Video Director** is a skill/plugin that gives Claude Code (or any agent with terminal + file access) the brain of a **director, producer, motion designer, editor and sound designer**.
+- Motion graphics and animated explainers, drawn in code (Canvas, SVG, Three.js, GSAP)
+- Editing raw footage and talking-head clips: cuts, punch zooms, captions, B-roll, text behind the subject
+- Voiceover scripts for ElevenLabs, with word-level timing for every shot
+- Sound design synced to the frame and mixed to platform loudness (-14 LUFS)
+- Final MP4 renders in 9:16, 16:9 or 1:1
 
-You bring the idea and references. The agent:
+The skill is a production playbook (`SKILL.md`) plus a set of helper scripts. The agent follows a fixed process with approval gates, so you review the script, the plan and a preview before anything is fully rendered.
 
-1. 🧠 **Directs:** turns your story into a hook → problem → solution → proof → CTA plan.
-2. 🎙️ **Writes a paste-ready ElevenLabs voiceover script.** You generate the MP3 and send it back.
-3. ✏️ **Storyboards** every shot with timings locked to the voice, word by word.
-4. 🎨 **Animates in code:** Canvas, SVG, Three.js 3D, GSAP, p5.brush, Motion Canvas / Revideo.
-5. ✂️ **Edits raw footage like a pro:** punch zooms, cutouts, text behind subject, captions, speed ramps, whips, color.
-6. 🔊 **Sound-designs:** whooshes, risers, impacts and UI clicks synced to the frame, ducked under the VO, mastered to −14 LUFS.
-7. 🖥️ **Renders** frame-perfect MP4s through headless Chrome + ffmpeg, checking every change with a fast preview loop first.
+## Examples
 
-> It's not just a prompt. It's a full production pipeline: a 440-line director's playbook (`SKILL.md`) plus helper scripts for preflight, reference analysis, previews and API-key setup.
+All of these were made with this skill.
 
----
-
-## 🎥 Made with this skill
-
-Real outputs posted on Instagram. Tap a card to watch.
-
-<div align="center">
-
-| AI Creates Motion Graphic | MOTION keyboard | Brud Code launch |
+| AI Creates Motion Graphic | Motion keyboard | Brud Code launch |
 |:---:|:---:|:---:|
-| [<img src="assets/reel-ai-creates-motion-graphic.jpg" width="240" alt="AI Creates Motion Graphic reel">](https://www.instagram.com/reel/DeImcItix7Z/) | [<img src="assets/reel-motion-keyboard.jpg" width="240" alt="Motion keyboard 3D reel">](https://www.instagram.com/reel/DeH5WTZgSmX/) | [<img src="assets/reel-brud-code.jpg" width="240" alt="Brud Code product launch reel">](https://www.instagram.com/reel/Dd54bw2J5bc/) |
-| [▶ Watch reel](https://www.instagram.com/reel/DeImcItix7Z/) | [▶ Watch reel](https://www.instagram.com/reel/DeH5WTZgSmX/) | [▶ Watch reel](https://www.instagram.com/reel/Dd54bw2J5bc/) |
+| [<img src="assets/reel-ai-creates-motion-graphic.jpg" width="240" alt="AI Creates Motion Graphic">](https://www.instagram.com/reel/DeImcItix7Z/) | [<img src="assets/reel-motion-keyboard.jpg" width="240" alt="Motion keyboard">](https://www.instagram.com/reel/DeH5WTZgSmX/) | [<img src="assets/reel-brud-code.jpg" width="240" alt="Brud Code launch">](https://www.instagram.com/reel/Dd54bw2J5bc/) |
+| [Watch on Instagram](https://www.instagram.com/reel/DeImcItix7Z/) | [Watch on Instagram](https://www.instagram.com/reel/DeH5WTZgSmX/) | [Watch on Instagram](https://www.instagram.com/reel/Dd54bw2J5bc/) |
 
-</div>
-
-**And the ad for this very skill**: a 56-second, 1080p, fully voiced and sound-designed launch film, built end to end by an agent running Motion Video Director:
+The launch ad for this skill was also produced with it: a 56-second, 1080p SaaS ad with voiceover, 2D/3D animation and a full sound mix.
 
 <div align="center">
-<img src="assets/clawd-ending.gif" alt="Clawd pixel robot ending sequence" width="640">
+<img src="assets/clawd-ending.gif" alt="Closing sequence of the launch ad" width="640">
 </div>
 
----
+## Installation
 
-## 🚀 Install in 30 seconds
-
-### Claude Code (recommended, as a plugin)
+### Claude Code plugin
 
 ```text
 /plugin marketplace add Miftahul-Islam-Efaz/Motion-graphics-skill
 /plugin install motion-video-director@motion-graphics-skill
 ```
 
-Restart Claude Code, then just say:
-
-```text
-Make me a 30-second 9:16 reel for my SaaS launch. Here are my references…
-```
-
-### Claude Code (manual skill install)
+### Claude Code skill (manual)
 
 ```bash
 git clone https://github.com/Miftahul-Islam-Efaz/Motion-graphics-skill.git
-# personal (all projects)
+
+# available in every project
 cp -r Motion-graphics-skill/skills/motion-video-director ~/.claude/skills/
-# or project-only
+
+# or only in the current project
 cp -r Motion-graphics-skill/skills/motion-video-director .claude/skills/
 ```
 
-### Other agents (Codex, Cursor, Claude Desktop, VS Code)
+### Codex, Cursor and other agents
 
-Copy `skills/motion-video-director/` into your project and tell the agent:
-
-```text
-Read skills/motion-video-director/SKILL.md and follow it as your operating manual for this video project.
-```
-
-Any agent that can run terminal commands and edit files can use it.
-
----
-
-## 🧩 What's inside
+Copy `skills/motion-video-director/` into your project, then tell the agent:
 
 ```text
-Motion-graphics-skill/
-├── .claude-plugin/
-│   ├── plugin.json          # Claude Code plugin manifest
-│   └── marketplace.json     # one-command install
-└── skills/motion-video-director/
-    ├── SKILL.md             # the director's playbook (the brain)
-    └── scripts/
-        ├── preflight.sh     # checks node, ffmpeg, Playwright, Python models, API keys
-        ├── preview.mjs      # fast preview loop: renders any time range to a contact sheet
-        ├── analyze_ref.sh   # breaks a reference video into frames, cuts, spectrogram, audio
-        ├── create_env.sh    # creates a safe .env with empty key slots
-        └── normalize_env.py # turns messy key files into a clean .env (never prints values)
+Read skills/motion-video-director/SKILL.md and follow it for this video project.
 ```
 
-### The playbook covers
+Any agent with terminal and file access can use it.
 
-| Area | What the agent knows |
+## Usage
+
+Describe the video you want and attach references if you have them.
+
+```text
+Make a 30-second 9:16 launch reel for my SaaS. References attached.
+```
+
+```text
+Edit my raw talking-head clip into a reel with captions, punch zooms and B-roll.
+```
+
+```text
+Create a 45-second product explainer of our dashboard. Clean UI animation, subtle sound design.
+```
+
+The agent then works through these steps:
+
+1. **Brief.** Collects references, story, audience, format and length.
+2. **Voiceover script.** Writes a script ready to paste into ElevenLabs. You generate the MP3 and send it back.
+3. **Storyboard.** Times every shot to the words in the voiceover.
+4. **Build.** Animates the scenes in code and edits any footage you provided.
+5. **Preview.** Renders contact sheets of each scene and fixes problems before the full render.
+6. **Render and mix.** Exports the final video with sound design and loudness normalization, then runs a QA checklist.
+
+You approve the script, the plan and the preview before the final render. Progress is logged in `PROGRESS.md`, so a new session can continue where the last one stopped.
+
+## What the skill covers
+
+| Area | Details |
 |---|---|
-| 🎬 **Directing** | Hooks in the first 3 s, pacing, shot vocabulary, J/L cuts, match cuts, CTA rules |
-| 🔥 **Editing intensity** | 5 levels, from hyper reels to restrained corporate. Effects must earn their place |
-| ✏️ **Motion catalogue** | Kinetic type, 3D text, UI mockups, cursors, stickers, halftone, ink, particles, Lottie |
-| ✂️ **Raw-footage editing** | Punch zooms, RVM/SAM2 matting, text-behind-subject, silhouette flashes, speed ramps |
-| 🧊 **3D** | Three.js product orbits, floating cards, fly-throughs, extruded logos |
-| 🎞️ **Animation principles** | Disney's 12, easing families, stagger, overshoot, eye-trace |
-| 🎨 **Color & layout** | 60-30-10, WCAG contrast, 9:16 safe zones, type pairing |
-| 🔊 **Sound design** | Riser → impact → whoosh, frame-accurate sync, sidechain ducking, −14 LUFS / −1.5 dBTP |
-| 🎙️ **Voiceover** | ElevenLabs v3/v4 scripting, VO intake QA, word-level timestamps with faster-whisper |
-| 🔎 **Asset hunting** | Firecrawl fonts, Freesound, Pexels/Pixabay, LottieFiles, plus Playwright to browse Pinterest/Behance/Dribbble by itself |
-| ✅ **QA** | A delivery checklist so nothing ships with cropped text, pops or clipping |
+| Directing | Hooks in the first 3 seconds, pacing, shot types, J/L cuts, match cuts, CTA structure |
+| Editing intensity | Five levels, from fast-paced reels to restrained corporate video |
+| Motion graphics | Kinetic typography, 3D text, UI mockups, cursor animation, stickers, particles, Lottie |
+| Footage editing | Punch zooms, subject cutouts (RVM, SAM2), captions behind the subject, speed ramps |
+| 3D | Three.js product shots, floating cards, camera fly-throughs, extruded logos |
+| Animation | The 12 principles of animation, easing, staggering, overshoot |
+| Color and layout | 60-30-10 color, WCAG contrast, safe zones for 9:16 platforms |
+| Sound | Risers, impacts and whooshes synced to the frame, ducking under voice, -14 LUFS / -1.5 dBTP |
+| Voiceover | ElevenLabs scripting, audio QA, word timestamps with faster-whisper |
+| Assets | Fonts, sound effects and stock footage via Firecrawl, Freesound, Pexels, Pixabay and LottieFiles. The agent can also browse sites like Pinterest and Behance with Playwright |
 
----
+## Repository structure
 
-## 🛠️ Requirements
+```text
+.claude-plugin/
+  plugin.json            Plugin manifest
+  marketplace.json       Marketplace entry for one-command install
+skills/motion-video-director/
+  SKILL.md               The production playbook
+  scripts/
+    preflight.sh         Checks Node, ffmpeg, Playwright, Python tools and API keys
+    preview.mjs          Renders a time range to a contact sheet for quick review
+    analyze_ref.sh       Breaks a reference video into frames, cuts and audio
+    create_env.sh        Creates a .env file with empty API key slots
+    normalize_env.py     Converts an existing key file into a clean .env
+```
 
-| Required | Optional (unlocks more) |
-|---|---|
-| Node.js 18+ and npm | Python 3.10+ with `faster-whisper`, `rembg`, `demucs` |
-| ffmpeg + ffprobe | Playwright MCP (visual asset hunting) |
-| Playwright / headless Chrome | ElevenLabs, Firecrawl, Freesound, Pexels, Pixabay, LottieFiles MCPs or API keys |
+## Requirements
 
-Run the preflight any time and it tells you exactly what's missing:
+Required: Node.js 18+, ffmpeg and ffprobe, and Playwright with headless Chrome.
+
+Optional: Python 3.10+ with `faster-whisper`, `rembg` and `demucs` for transcription, cutouts and stem separation. You can also add API keys or MCP servers for ElevenLabs, Firecrawl, Freesound, Pexels, Pixabay and LottieFiles.
+
+To see what is installed and what is missing, run:
 
 ```bash
 bash skills/motion-video-director/scripts/preflight.sh
 ```
 
-API keys live in a local `.env` (auto-gitignored). Values are never printed.
+API keys are stored in a local `.env` file, which is excluded from git.
 
----
+## FAQ
 
-## 🔁 How a project flows
+**Do I need After Effects or Premiere Pro?**
+No. Animation is written in code and rendered with headless Chrome and ffmpeg.
 
-```mermaid
-flowchart LR
-  A[Kickoff + references] --> B[Brief]
-  B --> C[ElevenLabs VO script]
-  C -->|you send the MP3| D[Storyboard + style board]
-  D --> E[Build scenes in code]
-  E --> F[Fast preview loop]
-  F -->|fix| E
-  F --> G[Final render + sound mix]
-  G --> H[QA + delivery]
-```
+**Can it edit existing footage, or only create animation?**
+Both. It can cut, caption, grade and sound-design raw clips, and combine them with motion graphics.
 
-Gates that need your approval: **script → plan → preview → final render.** The agent never renders a full video without your OK, and it keeps a `PROGRESS.md` + `LOG.md` so any session can pick up where the last one stopped.
+**What does it cost to run?**
+Rendering is free and local. ElevenLabs and some stock-media APIs have their own pricing; their free tiers cover most projects.
 
----
+**Does it work outside Claude Code?**
+Yes. It works with any agent that can run terminal commands and edit files, including Codex and Cursor.
 
-## 💡 Prompt ideas
+## Author
 
-- *"Edit my raw talking-head clip into a premium 9:16 reel with kinetic captions and punch zooms."*
-- *"Make a 45 s SaaS explainer of our dashboard, clarity-first, with soft UI sound design."*
-- *"Recreate the energy of this reference (attached), but for my brand colors."*
-- *"Turn this blog post into a 20 s hook video with a 3D product orbit."*
-
----
-
-## ❓ FAQ
-
-**Do I need After Effects or Premiere?** No. Everything is code + ffmpeg, rendered locally.
-
-**Does it cost anything to run?** Rendering is local and free. ElevenLabs and some stock APIs have their own plans. Free tiers work for most projects.
-
-**Can it edit real footage, or only animate?** Both. It cuts, mattes, captions, grades and sound-designs raw clips, and mixes in code-drawn graphics.
-
-**Vertical and horizontal?** Yes. 9:16, 16:9 and 1:1, re-laid natively per format (never just cropped).
-
----
-
-## 📜 Changelog
-
-- **v3.0.0**: plugin packaging, fast preview loop, Playwright asset hunting, Demucs stems, Firecrawl font sourcing, reverse-engineered reference recipes.
-
----
-
-<div align="center">
-
-### If this saved you hours, **⭐ star the repo** and share your render. Tag me, I repost the best ones.
-
-**Built by [Miftahul Islam Efaz](https://www.instagram.com/miftahul_islam_efaz/)** · AI Systems Developer
-
-<a href="https://www.instagram.com/miftahul_islam_efaz/"><img src="https://img.shields.io/badge/Instagram-@miftahul__islam__efaz-E4405F?style=flat-square&logo=instagram&logoColor=white" alt="Instagram"></a>
+Made by [Miftahul Islam Efaz](https://www.instagram.com/miftahul_islam_efaz/). If you make something with it, tag me on Instagram.
 
 © 2026 Miftahul Islam Efaz. All rights reserved.
-
-</div>

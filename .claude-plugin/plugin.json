@@ -1,12 +1,25 @@
 {
   "name": "motion-video-director",
   "version": "3.0.0",
-  "description": "Turn your AI coding agent into a full motion-graphics studio and pro video editor: story → ElevenLabs VO script → code-drawn 2D/3D animation → raw-footage editing → sound design → final render. Local, deterministic, frame-perfect.",
+  "description": "Motion graphics and video editing skill for Claude Code. Plans, animates, edits, voices and sound-designs complete videos, rendered locally without After Effects.",
   "author": {
     "name": "Miftahul Islam Efaz",
     "url": "https://www.instagram.com/miftahul_islam_efaz/"
   },
   "homepage": "https://github.com/Miftahul-Islam-Efaz/Motion-graphics-skill",
   "repository": "https://github.com/Miftahul-Islam-Efaz/Motion-graphics-skill",
-  "keywords": ["motion-graphics", "video-editing", "animation", "three.js", "ffmpeg", "elevenlabs", "sound-design", "claude-code", "skill", "reels"]
+  "keywords": [
+    "motion-graphics",
+    "video-editing",
+    "ai-video-editing",
+    "claude-code",
+    "claude-skills",
+    "animation",
+    "captions",
+    "sound-design",
+    "ffmpeg",
+    "threejs",
+    "elevenlabs",
+    "after-effects-alternative"
+  ]
 }
