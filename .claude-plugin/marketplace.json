@@ -1,0 +1,20 @@
+{
+  "name": "motion-graphics-skill",
+  "owner": {
+    "name": "Miftahul Islam Efaz",
+    "url": "https://github.com/Miftahul-Islam-Efaz"
+  },
+  "metadata": {
+    "description": "Motion Video Director: an AI motion-design + video-editing studio as a Claude Code plugin.",
+    "version": "3.0.0"
+  },
+  "plugins": [
+    {
+      "name": "motion-video-director",
+      "source": "./",
+      "description": "Plan, direct and render code-drawn 2D/3D motion graphics and pro-level edits of raw footage, with VO, captions and sound design.",
+      "version": "3.0.0",
+      "category": "creative"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+.env
+*.env
+node_modules/
+cache/
+renders/
+models/
+.DS_Store
+Thumbs.db
