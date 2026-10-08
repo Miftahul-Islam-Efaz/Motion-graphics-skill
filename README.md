@@ -41,34 +41,40 @@ The launch ad for this skill was also produced with it: a 56-second, 1080p SaaS 
 
 ## Installation
 
+### Quick install (recommended)
+
+Run this in your project folder. It works with Claude Code, Codex, Cursor and other agents that support skills:
+
+```bash
+npx skills add Miftahul-Islam-Efaz/Motion-graphics-skill
+```
+
+You need Node.js installed. The installer asks which agent you use and copies the skill to the right folder.
+
 ### Claude Code plugin
+
+Inside Claude Code, run:
 
 ```text
 /plugin marketplace add Miftahul-Islam-Efaz/Motion-graphics-skill
 /plugin install motion-video-director@motion-graphics-skill
 ```
 
-### Claude Code skill (manual)
+Restart Claude Code afterwards.
 
-```bash
-git clone https://github.com/Miftahul-Islam-Efaz/Motion-graphics-skill.git
+### Manual install
 
-# available in every project
-cp -r Motion-graphics-skill/skills/motion-video-director ~/.claude/skills/
+1. Click **Code → Download ZIP** at the top of this page and unzip it.
+2. Copy the `skills/motion-video-director` folder into one of these locations:
+   - `~/.claude/skills/` to use it in every project (on Windows: `C:\Users\<you>\.claude\skills\`)
+   - `.claude/skills/` inside a project to use it only there
+3. Restart Claude Code.
 
-# or only in the current project
-cp -r Motion-graphics-skill/skills/motion-video-director .claude/skills/
-```
-
-### Codex, Cursor and other agents
-
-Copy `skills/motion-video-director/` into your project, then tell the agent:
+For Codex, Cursor or other agents, copy the folder into your project and tell the agent:
 
 ```text
 Read skills/motion-video-director/SKILL.md and follow it for this video project.
 ```
-
-Any agent with terminal and file access can use it.
 
 ## Usage
 
