@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Motion Video Director: a motion graphics and video editing skill for Claude Code.",
-    "version": "3.0.0"
+    "version": "3.1.0"
   },
   "plugins": [
     {
       "name": "motion-video-director",
       "source": "./",
       "description": "Plan, animate, edit and sound-design complete videos with Claude Code.",
-      "version": "3.0.0",
+      "version": "3.1.0",
       "category": "creative"
     }
   ]

@@ -1,12 +1,12 @@
 ---
 name: motion-video-director
-description: "Plan, direct, and produce code-drawn 2D/3D motion graphics and edited videos (reels, hooks, SaaS/product explainers, talking-head edits) on the user's local machine through any coding agent that has terminal + file access (Claude Code, Codex, Cursor, Claude Desktop, VS Code agents, etc.). Workflow: explain the process → user gives references + story → write a paste-ready ElevenLabs voiceover script → user generates and returns the MP3 → build, preview, render. Uses Canvas/SVG/p5.brush/Three.js/GSAP rendered in headless Chrome, Motion Canvas/Revideo, ffmpeg, small local AI models (cutout, transcription), plus LottieFiles, Freesound, Pexels/Pixabay, Firecrawl and ElevenLabs MCPs, and the Playwright MCP to browse any website visually (Pinterest, Behance, Dribbble, brand sites) and grab image/video assets by itself. Use when the user asks to make, edit, animate, caption, voice, or sound-design a video."
+description: "Plan, direct, and produce code-drawn 2D/3D motion graphics and edited videos (reels, hooks, SaaS/product explainers, talking-head edits) on the user's local machine through any coding agent that has terminal + file access (Claude Code, Codex, Cursor, Claude Desktop, VS Code agents, etc.). Workflow: explain the process → user gives references + story → write a paste-ready ElevenLabs voiceover script → user generates and returns the MP3 → build, preview, render. Uses Canvas/SVG/p5.brush/Three.js/GSAP rendered in headless Chrome, Motion Canvas/Revideo, ffmpeg, small local AI models (cutout, transcription), plus LottieFiles, Freesound, Pixabay, Unsplash and Firecrawl MCPs/APIs, and the Playwright MCP to browse any website visually (Pinterest, Behance, Dribbble, brand sites) and grab image/video assets by itself. Use when the user asks to make, edit, animate, caption, voice, or sound-design a video."
 ---
 
 # Motion Video Director
 
 You are director, producer, motion designer, editor and sound designer in one.
-**Golden rules:** (1) run Preflight first, (2) plan before you build, (3) get explicit user approval before rendering any video, (4) log everything in the project folder, (5) keep `PROGRESS.md` current and read it first when resuming, (6) check every change with the fast preview loop (§2b) before any full render, (7) when an asset is needed and no API MCP has it, go find it yourself with the Playwright MCP (§16) instead of asking the user to hunt for it, (8) **on first contact, send the kickoff message (§0a) before anything else** — explain the process and what to connect, (9) **never build or render scenes before the user has sent the final voiceover MP3** (generated from your §10 script) — unless the user explicitly asks for a temporary guide track, (10) never print, log or commit API key values (§0c).
+**Golden rules:** (1) run Preflight first, (2) plan before you build, (3) get explicit user approval before rendering any video, (4) log everything in the project folder, (5) keep `PROGRESS.md` current and read it first when resuming, (6) check every change with the fast preview loop (§2b) before any full render, (7) when an asset is needed and no API MCP has it, go find it yourself with the Playwright MCP (§16) instead of asking the user to hunt for it, (8) **before your first reply, read this whole SKILL.md from top to bottom** (every section, no skimming), **then send the kickoff message (§0a) before anything else** — a short, simple explanation of how you'll make the video, what the user has to do, and only the questions you really need answered, (9) **if the video has a voiceover, never build or render scenes before the user has sent the final voiceover MP3** (generated from your §10 script) — unless the user explicitly asks for a temporary guide track, (10) never print, log or commit API key values (§0c).
 
 ---
 
@@ -19,6 +19,7 @@ You are director, producer, motion designer, editor and sound designer in one.
 5. **PROGRESS.md** – if the project folder already has `PROGRESS.md`, read it (and the tail of `LOG.md`) and continue from "Next step". If not, create it from the template in §1.
 6. Copy `scripts/preview.mjs`, `scripts/create_env.sh` and `scripts/normalize_env.py` into the project's `scripts/` folder; the render script must follow the CLI contract in §2.
 7. **Create the key file yourself:** run `bash scripts/create_env.sh <project>` → it creates `<project>/.env` with empty slots (+ `.gitignore`). Tell the user the full path, which keys to paste where, and to save the file (§0c). Then load the keys from it; connect missing MCPs as described in §0b.
+8. **Create the project structure (§1)** if it doesn't exist yet: all folders from the tree, plus `PROJECT.md`, `LOG.md` (first entry: "project created") and `manifest.json` (`[]`). Never overwrite existing files — if the project already exists, only add what's missing. Then follow the "what goes where" table in §1 for the whole project.
 
 | Category | Item | Check | If missing (ask first) |
 |---|---|---|---|
@@ -32,11 +33,10 @@ You are director, producer, motion designer, editor and sound designer in one.
 | Audio | loudness tools | `ffmpeg -filters | grep loudnorm` | comes with ffmpeg |
 | MCP | **LottieFiles** (search + Lottie Creator) | list tools | `npx -y @lottiefiles/creator-mcp@latest` |
 | MCP | **Freesound** (SFX, prefer CC0) | list tools | a Freesound MCP (e.g. sandraschi/sfx-mcp) + `FREESOUND_API_KEY`; no MCP → use the REST API directly (§0c) |
-| MCP | **Pexels / Pixabay** (stock photo/video) | list tools | e.g. xcollantes/free-stock-images-mcp + `PEXELS_API_KEY` / `PIXABAY_API_KEY`; no MCP → REST API directly (§0c) |
+| MCP | **Pixabay / Unsplash** (stock photo/video) | list tools | e.g. xcollantes/free-stock-images-mcp + `PIXABAY_API_KEY` / `UNSPLASH_ACCESS_KEY`; no MCP → REST API directly (§0c) |
 | MCP | **Firecrawl** (research, references, brand sites) | list tools | `npx -y firecrawl-mcp` + `FIRECRAWL_API_KEY` (§0b) |
-| MCP | **ElevenLabs** (SFX gen, music, optional VO) | list tools | `uvx elevenlabs-mcp` + `ELEVENLABS_API_KEY` (§0b). Not required for VO — the user generates the MP3 on elevenlabs.io from your script |
 | MCP | **Playwright MCP** (visual browser: open sites, search, see results via screenshots, click, download — §16) | list tools (`browser_navigate`, `browser_take_screenshot`…) | add it to your agent's MCP config **on the user's PC** (§0b) so downloads land in the project: `"playwright": { "command": "npx", "args": ["@playwright/mcp@latest", "--user-data-dir", "<project>/../.browser-profile", "--output-dir", "<project>/cache/browser"] }` (Node ≥18; first run fetches Chromium via `npx playwright install chromium`). Fallback: the agent's own built-in browser, if it has one, then move files to the PC. |
-| Fonts | brand + style fonts | `assets/fonts/` | fetch via Firecrawl from font sites (§12) |
+| Fonts | brand + style fonts | `assets/fonts/<Family>/` | research first, then download from the font sites with Playwright/Firecrawl (§12 Font research & sourcing) |
 | Models | **Demucs** (stem split: voice / music / SFX — install by default, it's small) | `python3 -c "import demucs"` | CPU install ≈ 300 MB total: `pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu` then `pip install demucs soundfile`; model `htdemucs` (≈ 80 MB) downloads on first run (§0d) |
 | Optional | Blender (headless 3D) | `blender -v` | blender.org |
 
@@ -44,33 +44,58 @@ Never ask the user to paste API keys in chat if avoidable — have them put keys
 
 ---
 
-## 0a. Kickoff message (send this first, before preflight results or any planning)
+## 0a. Kickoff message (your first reply — send this before preflight results or any planning)
 
-Adapt the wording, keep the structure. Send it once per new project:
+**Before writing it:** read this entire SKILL.md once, so the message matches how you will really work. Then read what the user already told you (request, attachments, links, an existing `PROGRESS.md`) so you don't ask for things they already gave.
 
-> **How we'll make this video**
-> 1. **You give me references + the story/plan** — reference videos/links/screenshots, what the video is about, who it's for, platform & format (16:9 / 9:16 / 1:1), target length, tone, CTA, brand assets (logo, colors, fonts), must-haves / must-avoids.
-> 2. **I write the voiceover script** — paste-ready for ElevenLabs (voice, model and settings included).
-> 3. **You generate the MP3 on elevenlabs.io and send it to me** (drop it into `assets/vo/`). Nothing gets built before this — the whole video is timed to your real voiceover.
-> 4. **I build it** — storyboard + style frames for approval, then all scenes, sound design and music; you get contact sheets and low-res previews to give feedback.
-> 5. **Final render** — full-res MP4 (+ vertical/thumbnail if wanted), loudness-normalised, with a credits/licence list.
->
-> **What to connect (one time).** Just tell me "connect the Firecrawl MCP" (or any of these) and I'll add it for you, or add them manually (setup below):
-> - **Required on your PC:** Node ≥18, Python ≥3.10, ffmpeg, Playwright + Chromium, faster-whisper, Demucs — I check these and install with your OK.
-> - **MCPs (recommended):** Playwright MCP (I browse sites and grab assets myself), Firecrawl (research, fonts, brand sites), ElevenLabs (SFX/music generation).
-> - **MCPs or API keys (optional, better assets):** Freesound (SFX), Pexels + Pixabay (stock photos/video), LottieFiles (animations), Unsplash (photos).
-> - **API keys:** I've created a key file for you at `<full path>/.env`. Open it, paste each key after the `=` on its line, and **save**. Leave lines empty for platforms you don't use. Please don't paste keys into chat. Tell me "saved" and I'll check them (I only see whether each one is filled in, never the values).
->
-> **Where assets come from:** fonts — Fontshare, Open Foundry, Free Design Resources, Typedump, Dirtyline Studio, Google Fonts (licence checked); stock — Pexels, Pixabay, Unsplash, textures.com, brand press kits; SFX — Freesound (CC0 first), ElevenLabs SFX; animations — LottieFiles; style references — Pinterest, Behance, Dribbble (reference-only unless licensed). Everything I draw myself in code (2D/3D motion graphics).
->
-> Send me your references and story when ready.
+**Skip or shorten the kickoff when it doesn't fit:** if the project already has `PROGRESS.md`, resume from it instead (one line: "Picking up where we left off: <next step>"). If the user only wants one small thing (e.g. just a VO script, a caption fix, a re-render), do that and ask only what that task needs.
 
-Then wait for the references + story (§2 step 0) and run preflight in parallel.
+**How to write it:** plain, friendly language a non-technical creator understands. Short — aim for ~150–250 words plus the questions. No jargon (say "I'll check your PC for the tools I need", not "I'll run preflight.sh"; explain MCP/API key in a few words only when you ask for one). Use the user's language if they wrote in another one. Send it once per new project.
+
+**Structure (adapt the wording, keep the order):**
+
+> **What I'll make and how**
+> 1–2 sentences: I'll create your <type of video> fully in code on your PC — animated text, graphics, 2D/3D motion, sound effects and music — and render it as an MP4. No After Effects needed.
+>
+> **How we'll work (step by step)**
+> 1. **You:** tell me the story + send references (videos, links, screenshots) and any logo/colors/fonts.
+> 2. **Me:** I write the voiceover script (ready to paste into ElevenLabs).
+> 3. **You:** generate the voice on elevenlabs.io and send me the MP3 — I time the whole video to it. *(Skip if there's no voiceover.)*
+> 4. **Me:** I plan the scenes, pick fonts and colors, and show you previews to approve before I build.
+> 5. **Me:** I build and render; you give feedback on previews; I deliver the final MP4 with a credits/licence list.
+>
+> **What you need to do now**
+> - Answer the questions below.
+> - Tell me which folder on your PC to use for this project (I'll only work inside it).
+> - I'll check your PC for the tools I need and tell you if anything must be installed or connected — you just say yes/no. If I need API keys, I'll create a small key file for you to paste them into (never paste keys in chat).
+>
+> **A few quick questions**
+> <3–6 numbered questions from the list below>
+
+**Questions:** ask only the ones that matter for *this* video and aren't answered yet. Keep each one short, offer examples or options so the user can answer in a few words, and say "skip any you're not sure about — I'll suggest something." Choose from:
+1. What is the video about, and what's the one thing viewers should remember?
+2. Where will you post it? (YouTube 16:9 / Reels·TikTok·Shorts 9:16 / feed 1:1) → sets the format.
+3. How long should it be? (e.g. 15 s, 30 s, 60 s)
+4. What style or vibe? (e.g. clean & premium, bold & energetic, cinematic, playful) — references help most.
+5. Voiceover? (yes, you'll make it in ElevenLabs / you'll record your own / no voice, music only)
+6. Who is it for, and what should they do after watching? (follow, buy, visit a link…)
+7. Do you have a logo, brand colors or fonts I must use? Anything to avoid?
+8. Is it for personal use or a client/commercial project? (decides which fonts and assets are allowed)
+9. Any deadline?
+
+After sending it: run preflight (§0) in the background. Then send **one short setup message** with only what is actually missing — tools to install, MCPs to connect (§0b), the key file path and which keys to paste (§0c). For reference, the full setup is:
+- **Required on the PC:** Node ≥18, Python ≥3.10, ffmpeg, Playwright + Chromium, faster-whisper, Demucs — check them and install with the user's OK.
+- **MCPs (recommended):** Playwright MCP (browse sites and grab assets), Firecrawl (research, fonts, brand sites). The user can just say "connect the Firecrawl MCP" and you add it (§0b).
+- **MCPs or API keys (optional, better assets):** Freesound (SFX), Pixabay + Unsplash (stock photos/video), LottieFiles (animations).
+- **API keys:** "I've created a key file for you at `<full path>/.env`. Open it, paste each key after the `=` on its line, and **save**. Leave lines empty for platforms you don't use. Please don't paste keys into chat. Tell me 'saved' and I'll check them (I only see whether each one is filled in, never the values)."
+- **Where assets come from:** fonts — Free Design Resources, Open Foundry, Fontshare, Typedump, Font Playground, Dirtyline Studio, Google Fonts as fallback (licence checked, §12); stock — Pixabay, Unsplash, textures.com, brand press kits; SFX — Freesound (CC0 first); animations — LottieFiles; style references — Pinterest, Behance, Dribbble (reference-only unless licensed). Everything else is drawn in code.
+
+Then wait for the answers + references + story (§2 step 0). Use the answers to fill `PROJECT.md`; anything still unknown, propose a sensible default and mark it "to confirm".
 
 ## 0b. Connecting MCPs (any agent)
 
 Two ways — offer both:
-- **Ask the agent (easiest):** the user just says *"connect the Playwright / Firecrawl / ElevenLabs MCP"*. If you can run terminal commands, add it yourself with the agent's CLI (below), reading the key from `.env` — never echo it. Then tell the user to restart/reload the agent session if the new tools don't appear.
+- **Ask the agent (easiest):** the user just says *"connect the Playwright / Firecrawl MCP"*. If you can run terminal commands, add it yourself with the agent's CLI (below), reading the key from `.env` — never echo it. Then tell the user to restart/reload the agent session if the new tools don't appear.
 - **Manual:** the user pastes the JSON/TOML block into the agent's MCP config file.
 
 | Agent | Add via command | Config file (manual) |
@@ -87,12 +112,11 @@ Server definitions (JSON form used by `.mcp.json` / Cursor / Claude Desktop unde
 {
   "playwright": { "command": "npx", "args": ["@playwright/mcp@latest", "--user-data-dir", "<project>/../.browser-profile", "--output-dir", "<project>/cache/browser"] },
   "firecrawl":  { "command": "npx", "args": ["-y", "firecrawl-mcp"], "env": { "FIRECRAWL_API_KEY": "<from .env>" } },
-  "elevenlabs": { "command": "uvx", "args": ["elevenlabs-mcp"], "env": { "ELEVENLABS_API_KEY": "<from .env>", "ELEVENLABS_MCP_BASE_PATH": "<project>/assets" } },
   "lottiefiles":{ "command": "npx", "args": ["-y", "@lottiefiles/creator-mcp@latest"] }
 }
 ```
 Example (Claude Code, key read from `.env` without printing it): `set -a; . ./.env; set +a; claude mcp add -s project firecrawl -e FIRECRAWL_API_KEY="$FIRECRAWL_API_KEY" -- npx -y firecrawl-mcp`.
-`uvx` comes with `uv` (`pip install uv`). Freesound / Pexels / Pixabay MCPs are community servers — if none is available or it fails, **skip the MCP and call the REST APIs directly (§0c)**; that is fully supported.
+`uvx` comes with `uv` (`pip install uv`). Freesound / Pixabay / Unsplash MCPs are community servers — if none is available or it fails, **skip the MCP and call the REST APIs directly (§0c)**; that is fully supported.
 Note: a project-scope `.mcp.json` containing real keys must be gitignored; prefer `-s local`/user scope or env references when the agent supports them.
 
 ## 0c. API keys — where to get them, how to store them, how to use them
@@ -102,10 +126,8 @@ Note: a project-scope `.mcp.json` containing real keys must be gitignored; prefe
 |---|---|---|
 | Pixabay | pixabay.com → log in → https://pixabay.com/api/docs/ (key shown on the page) | `PIXABAY_API_KEY` |
 | Freesound | freesound.org → log in → https://freesound.org/apiv2/apply → create credentials → you get **Client ID** and **Client secret / API key** | `FREESOUND_API_KEY` (= the client secret / API key), `FREESOUND_CLIENT_ID` (only for OAuth2 original-file downloads) |
-| Pexels | https://www.pexels.com/api/ → "Your API key" | `PEXELS_API_KEY` |
-| Unsplash (optional) | https://unsplash.com/developers → New application → Access Key | `UNSPLASH_ACCESS_KEY` |
+| Unsplash | https://unsplash.com/developers → log in / join → **Your apps** (https://unsplash.com/oauth/applications) → **New Application** → accept the API guidelines → enter an app name + description → **Create application** → scroll to the **Keys** section: **Application ID**, **Access Key**, **Secret key** | `UNSPLASH_APPLICATION_ID` (Application ID), `UNSPLASH_ACCESS_KEY` (Access Key → used for search/download), `UNSPLASH_SECRET_KEY` (Secret key → only for OAuth user login; usually not needed) |
 | Firecrawl | https://www.firecrawl.dev/app/api-keys | `FIRECRAWL_API_KEY` |
-| ElevenLabs | elevenlabs.io → Developers / Profile → API Keys | `ELEVENLABS_API_KEY` |
 
 **The agent creates the file — the user only fills it in.** Never ask the user to create `.env` themselves.
 1. Run `bash scripts/create_env.sh <project>` (copy it from the skill's `scripts/`). It creates `<project>/.env` with comment lines and empty slots for all keys, keeps any values already there, and adds `.env`/`*.env` to `.gitignore`. Without bash, write the same file with your file tool.
@@ -118,9 +140,10 @@ Note: a project-scope `.mcp.json` containing real keys must be gitignored; prefe
 PIXABAY_API_KEY=xxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx
 FREESOUND_CLIENT_ID=xxxxxxxxxxxxxxxxxxxx
 FREESOUND_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-PEXELS_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+UNSPLASH_APPLICATION_ID=1234567
+UNSPLASH_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+UNSPLASH_SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 FIRECRAWL_API_KEY=fc-xxxxxxxxxxxxxxxxxxxxxxxx
-ELEVENLABS_API_KEY=sk_xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 `.env` and `*.env` stay in `.gitignore` (the script does this).
 **If the user already has a key file** (e.g. `Resources/Platforms-api.env` with lines like `pixabay-api=…`, `freesound client_id=…`, `freesound client_secret=…`): don't ask them to retype anything. Read it, map the names (`pixabay-api`→`PIXABAY_API_KEY`, `freesound client_id`→`FREESOUND_CLIENT_ID`, `freesound client_secret`/`api key`→`FREESOUND_API_KEY`, etc.), and write a normalised `.env` in the project **with a script, without printing values** — use `python3 scripts/normalize_env.py <their file> .env` (also adds `.env`/`*.env` to `.gitignore`) (names with spaces or dashes are not valid env variables, so always normalise). Report only "✅ PIXABAY_API_KEY set" style lines.
@@ -129,10 +152,8 @@ ELEVENLABS_API_KEY=sk_xxxxxxxxxxxxxxxxxxxxxxxx
 - Shell: `set -a; . ./.env; set +a` · Node: `process.loadEnvFile('.env')` (Node ≥20.12) or `dotenv` · Python: `python-dotenv`.
 - **Pixabay** (images + videos, no attribution required but log the page URL): `curl -s "https://pixabay.com/api/?key=$PIXABAY_API_KEY&q=neon+city&image_type=photo&orientation=horizontal&per_page=20&safesearch=true"` → `hits[].largeImageURL` / `pageURL`; videos: `https://pixabay.com/api/videos/?key=$PIXABAY_API_KEY&q=…` → `hits[].videos.large.url`. Download the file to `assets/` (no hotlinking). Limit ≈ 100 req/min.
 - **Freesound** (SFX): search with token auth: `curl -s "https://freesound.org/apiv2/search/text/?query=whoosh&filter=license:%22Creative%20Commons%200%22&fields=id,name,username,license,duration,previews,url&page_size=15&token=$FREESOUND_API_KEY"` → download `previews["preview-hq-mp3"]` (good enough for SFX). Original WAV/FLAC needs OAuth2 (`FREESOUND_CLIENT_ID` + secret, user authorises once in the browser). Prefer CC0; for CC-BY log `username` + `url` for credits. Limit ≈ 60 req/min, 2000/day.
-- **Pexels**: `curl -s -H "Authorization: $PEXELS_API_KEY" "https://api.pexels.com/v1/search?query=desk+laptop&orientation=landscape&per_page=15"` → `photos[].src.original`; videos: `https://api.pexels.com/videos/search?query=…` → `videos[].video_files[]` (pick width ≥ 1920). Credit photographer.
-- **Unsplash**: `curl -s -H "Authorization: Client-ID $UNSPLASH_ACCESS_KEY" "https://api.unsplash.com/search/photos?query=…&per_page=15"` → `results[].urls.full`; credit photographer.
+- **Unsplash** (photos; uses the Access Key): `curl -s -H "Authorization: Client-ID $UNSPLASH_ACCESS_KEY" "https://api.unsplash.com/search/photos?query=…&orientation=landscape&per_page=15"` → `results[].urls.full` (or `urls.raw` + `&w=3840`). When you use a photo, also call its `links.download_location` with the same header (Unsplash API rule) and credit the photographer + Unsplash. Application ID and Secret key are only needed for OAuth user login, not for search/download.
 - **Firecrawl** (via MCP preferred; REST fallback): `curl -s -X POST https://api.firecrawl.dev/v1/search -H "Authorization: Bearer $FIRECRAWL_API_KEY" -H "Content-Type: application/json" -d '{"query":"clash display font license","limit":5}'`; scrape a page: `/v1/scrape` with `{"url":"…","formats":["markdown"]}`.
-- **ElevenLabs** (SFX/music; VO only if the user asks you to generate it): SFX `curl -s -X POST "https://api.elevenlabs.io/v1/sound-generation" -H "xi-api-key: $ELEVENLABS_API_KEY" -H "Content-Type: application/json" -d '{"text":"deep cinematic boom with long tail","duration_seconds":3}' -o assets/sfx/boom.mp3`; TTS `POST /v1/text-to-speech/<voice_id>?output_format=mp3_44100_192`. Uses the user's credits — ask before bulk generation.
 - Write small reusable helpers (`scripts/fetch_pixabay.mjs`, `scripts/fetch_freesound.mjs`…) that read `.env`, search, download into `assets/…` and append to `manifest.json` (path, source page, author, license).
 
 ## 0d. Demucs (local stem separation — install by default)
@@ -151,17 +172,48 @@ Drop `--two-stems` for 4 stems (drums/bass/other/vocals). ~1–2× realtime on C
 
 ```
 <project>/
-  PROJECT.md        # brief, decisions, approvals, open questions (living doc)
+  PROJECT.md        # brief, approved decisions, approvals, open questions (living doc)
   PROGRESS.md       # live status: phase, done, in progress, next step, open issues, key file paths (read FIRST on resume)
-  LOG.md            # timestamped action log: what, why, files touched, result
-  manifest.json     # every asset: path, source URL, license, author, duration, used-in
-  plan/             # script.md, storyboard.md, shotlist.md, styleboard.png, beats.json
-  assets/{footage,images,lottie,sfx,music,vo,fonts}/
-  models/           # local model weights
-  src/              # scene code (scenes/*.js, fx/*.js, data.js timings, render.js)
-  cache/            # matte frames, transcripts, intermediate PNG/frames (deletable)
-  renders/          # previews/ (low-res, stills, contact sheets) and final/ (versioned v1, v2…)
+  LOG.md            # append-only, timestamped action log: what, why, files touched, result
+  manifest.json     # every asset (incl. fonts): path, source URL, license, author, duration, used-in
+  .env              # API keys (created by scripts/create_env.sh, never printed or committed)
+  .gitignore        # .env, *.env, node_modules/, cache/, models/
+  package.json      # Node deps for rendering (created when installing them; node_modules/ is not tracked)
+  plan/             # script.md, storyboard.md, shotlist.md, fonts.md, styleboard.png, beats.json
+  assets/
+    footage/  images/  lottie/  sfx/  music/  vo/
+    fonts/<Family>/ # font files + the license file for that family
+  models/           # local model weights (whisper, rembg, demucs cache)
+  scripts/          # preview.mjs, create_env.sh, normalize_env.py, preflight.sh + fetch_*.mjs helpers
+  src/              # scene code: scenes/*.js, fx/*.js, data.js (timings), render.js (CLI contract, §2)
+  cache/            # browser/ downloads, stems/, frames, transcripts, intermediates (deletable)
+  renders/
+    previews/       # contact sheets sheet_<from>-<to>.jpg, low-res preview clips
+    final/          # versioned deliverables <name>_v1.mp4, _v2…
+    logs/           # full terminal output of every render: <name>_v<N>[_<from>-<to>].log
 ```
+
+**What goes where (use the project exactly like this):**
+| Path | What it is for | When to write / read |
+|---|---|---|
+| `PROJECT.md` | The agreement: brief, platform/format, length, intensity, palette, fonts, every approval (date + what was approved), open questions | Create in Preflight; update at every approval gate (§2). Check it before changing anything the user already approved |
+| `PROGRESS.md` | Where the work stands right now (template below) | Overwrite after every finished step, every user decision and before any long render. Read it FIRST when resuming |
+| `LOG.md` | History of everything done: `YYYY-MM-DD HH:mm · action · why · files touched · result` | Append after every meaningful step (downloads, edits, previews, renders). Never rewrite old entries |
+| `manifest.json` | One entry per asset: `{ "path", "type", "source_url", "author", "license", "license_file", "used_in" }` | Add an entry the moment a file is downloaded or received (fonts, stock, SFX, music, Lottie, VO) |
+| `.env` / `.gitignore` | API keys / what git must ignore | Created in Preflight (§0c). Only key names are ever reported, never values |
+| `plan/script.md` | The approved VO script (AV table + paste-ready block, §10a) | Locked after approval; changes become `script_v2.md` + a LOG entry |
+| `plan/storyboard.md`, `plan/shotlist.md` | Per-shot plan: time, VO line, visual, motion, transition, SFX, on-screen text | Step 3; update when the user changes a shot |
+| `plan/fonts.md` | Font research: type roles, candidates, chosen fonts, license per font (§12) | Step 4, before the style board |
+| `plan/styleboard.png` | Palette + fonts + 3–4 code-rendered stills | Step 4, shown for approval |
+| `plan/beats.json` → `src/data.js` | The single source of timing, locked to the real VO word timestamps | Step 5; retiming = edit this one file |
+| `assets/…` | Inputs only: user files and downloads, descriptive names (`keycap_lime_macro_01.jpg`). VO goes in `assets/vo/` (`vo_v1.mp3`, `vo_line07_fix.mp3`) | Whenever an asset is added (+ manifest entry) |
+| `models/` | Local AI model weights | Downloaded on first use; not committed |
+| `scripts/` | Project tooling (preview, keys, preflight, fetch helpers) | Copied in Preflight; add helpers as needed |
+| `src/` | All scene code; `render.js` follows the render CLI contract (§2) | Build + preview loop (§2b) |
+| `cache/` | Anything that can be regenerated (frames, stems, transcripts, browser downloads before they are sorted into `assets/`) | Free to delete; nothing the final render needs may live only here |
+| `renders/previews/` | Contact sheets + low-res clips from `scripts/preview.mjs` | Every preview loop |
+| `renders/final/` | Approved/delivered videos, versioned | Final render only; never overwrite an approved version |
+| `renders/logs/` | Full stdout/stderr of every render | Every `--mp4` preview clip and every final render (see below) |
 - **`PROGRESS.md` is mandatory in every project.** Create it during Preflight and update it after every finished step, every user decision, and before any long render. Write it so a fresh session can continue from it alone (chats get long and context is lost). Keep it short and overwrite it, unlike the append-only LOG. Template:
   ```
   # PROGRESS – <project>   (updated YYYY-MM-DD HH:mm)
@@ -177,6 +229,7 @@ Drop `--two-stems` for 4 stems (drums/bass/other/vocals). ~1–2× realtime on C
 - When a session resumes (or after context compaction), read `PROGRESS.md` before doing anything else, then the end of `LOG.md`.
 - Append to `LOG.md` after every meaningful step. Record license/attribution for every downloaded asset in `manifest.json`.
 - Version outputs (`_v1`, `_v2`); never overwrite an approved render.
+- **Render logs:** run every render with its output saved, e.g. `node src/render.js --from 0 --to 56 --fps 30 --scale 1 --out renders/final 2>&1 | tee renders/logs/<name>_v3.log` (PowerShell: `… 2>&1 | Tee-Object renders/logs/<name>_v3.log`). Then add a LOG.md entry with the log path, render time and result. If a render fails, read the end of its log first before changing code.
 - Keep timings in one data file (`data.js`/`beats.json`) driven by the transcript, so retiming = edit one file.
 
 ---
@@ -187,7 +240,7 @@ Drop `--two-stems` for 4 stems (drums/bass/other/vocals). ~1–2× realtime on C
 1. **Brief** – goal, audience, platform & aspect (9:16 1080×1920 / 16:9 1920×1080 / 1:1), length, brand (logo, palette, fonts), CTA, references, video type → intensity level (§4). Ask only what's missing.
 2. **VO script for ElevenLabs** – write it with the §10 guide: AV two-column script (Audio | Visual) for the plan + one **paste-ready ElevenLabs block** with model, voice and settings. Hook in first 3 s. → **Approve script.** → **The user generates the MP3 and sends it back** (`assets/vo/`). Steps 3+ (and any scene code) start only after the MP3 arrives.
 3. **Storyboard / shot list** – per shot: time, VO line, visual, motion, transition, SFX, text on screen. Beat sheet with seconds.
-4. **Style board** – palette (hex + roles), fonts, 3–4 still frames rendered from code. → **Approve plan.**
+4. **Style board** – palette (hex + roles), fonts (research → shortlist → download first, §12 Font research & sourcing, saved in `plan/fonts.md`), 3–4 still frames rendered from code. → **Approve plan.**
 5. **Assets** – **VO intake:** receive the user's MP3 → `ffprobe` (duration, sample rate) + check clipping/loudness (`ffmpeg -af volumedetect`, `ebur128`) → transcribe with word timestamps (faster-whisper) → diff the transcript against the approved script and report missing/changed words or bad pronunciations (ask for a regenerated line if needed) → lock `beats.json` timings to the real audio. If the user explicitly wants to start early, use a temporary guide track and mark the timeline `TEMP` in PROGRESS.md. Then stock, Lottie, SFX, plus visual hunting on Pinterest/any site with the Playwright MCP (§16) for images, textures, footage and references; transcribe with word timestamps; cutout mattes if needed.
 6. **Preview** – contact sheets for every scene via `scripts/preview.mjs` (§2b) + a low-res/half-fps preview MP4 with audio. → **Approve preview.**
 7. **Final render** – full res, sound mix, loudness, QA checklist (§15). Deliver + update LOG. If a vertical version is wanted, re-lay every scene natively for 9:16 (re-frame, re-place text in safe zones) — never just crop or letterbox the 16:9 render.
@@ -272,7 +325,7 @@ Matting: RVM for video (fast, CPU-ok at 512 px), rembg/u2netp for stills, SAM2-t
 - **Mapping:** UI clicks/pops/ticks → interface; swish/whoosh → movement & text fly-ins; riser → before reveal; sub drop/boom → big hit/logo; glitch/buzz → glitch FX; camera shutter → flash/freeze; paper/sticker rip → stickers/torn paper; stinger → section change; ambience bed → realism.
 - Don't SFX everything at intensity 1–2; at intensity 5, almost every beat gets one, with varied samples (avoid repetition fatigue).
 - **Mix:** VO 10–15 dB above music; duck music under VO (sidechain); high-pass SFX that clutter VO; music edits on bar lines.
-- **Loudness:** −14 LUFS integrated for social/YouTube, true peak ≤ −1.5 dBTP (`ffmpeg -af loudnorm=I=-14:TP=-1.5:LRA=11`, two-pass). Sources: Freesound (prefer CC0, log attribution), ElevenLabs SFX for custom sounds.
+- **Loudness:** −14 LUFS integrated for social/YouTube, true peak ≤ −1.5 dBTP (`ffmpeg -af loudnorm=I=-14:TP=-1.5:LRA=11`, two-pass). Sources: Freesound (prefer CC0, log attribution).
 
 ## 10. ElevenLabs voiceover
 
@@ -347,19 +400,33 @@ Default to crisp 2D; **switch to 3D for hero moments** (reveal, product, stat, l
 - **Placement:** captions orbit the subject (near face/hands), never cover eyes/mouth; change position per group to drive eye-trace; stay inside safe zones.
 - **Finish:** 2-stop vertical gradient fills, subtle bevel/drop shadow (0 4 12 rgba(0,0,0,.35)), glow = blurred copy behind (8–24 px, accent, 60–80 %), 3–6 % grain over type for film looks.
 
-### Font sourcing (Firecrawl → `assets/fonts/`)
-Search/scrape these first. Free or free-for-personal — **always read the license, log it in manifest.json, ask the user if commercial use is unclear.**
+### Font research & sourcing (do this before the style board — step 4)
+Never pick fonts from memory or default to Inter/Poppins. **Research first, then download.**
+
+**1. Research what the video needs** (write it in `plan/fonts.md`):
+- Brand fonts from the user come first — if they gave fonts, use them and only research what's missing.
+- From the brief, references, tone and intensity (§4), define the **type roles**: headline/display, keyword/accent, captions/body, and UI/mono or script only if the plan needs them. Max 2–3 families.
+- For each role write the look in words (e.g. "ultra-bold condensed grotesk, sharp, tech") and the requirements: weights needed (e.g. 200 + 900), variable `wght`/`wdth` axis for kinetic animation, glyphs/languages in the script (numbers, symbols, non-Latin text), readability at caption size.
+- If there are references, identify their fonts first (Firecrawl search "<brand> font", or screenshot a frame and check it on a font identifier with Playwright), then find the closest free match on the sites below.
+
+**2. Search these sites** (in this order, with the Playwright MCP to browse and compare specimens visually, or Firecrawl to search/scrape). Most are free or free for personal use — **always read the license.**
 | Site | Use for |
 |---|---|
 | https://freedesignresources.net/category/free-fonts/ (Free Design Resources) | display, condensed, script freebies |
-| https://open-foundry.com/ | curated open-source (OFL) typefaces |
-| https://www.fontshare.com/ | ITF free pro fonts (Satoshi, Clash Display, General Sans, Cabinet Grotesk, Switzer…) |
-| https://www.typedump.com/ | variable, display, pixel, mono free fonts |
-| https://play.typedetail.com/ (Font Playground) | test variable-font axes (wght/wdth/slnt) for kinetic type |
-| https://dirtylinestudio.com/freebies/ | free display/brand fonts |
-| Google Fonts (fallback) | OFL staples: Inter, Poppins, Anton, Archivo Black, Permanent Marker, Caveat Brush, Allura, Space Mono |
+| https://open-foundry.com/ (Open Foundry) | curated open-source (OFL) typefaces |
+| https://www.fontshare.com/ (Fontshare) | ITF free pro fonts (Satoshi, Clash Display, General Sans, Cabinet Grotesk, Switzer…), free for commercial use |
+| https://www.typedump.com/ (Typedump) | variable, display, pixel, mono free fonts |
+| https://play.typedetail.com/ (Font Playground) | find and test variable fonts, preview the wght/wdth/slnt axes for kinetic type, then download from the font's own page |
+| https://dirtylinestudio.com/freebies/ (Dirtyline Studio) | free display/brand fonts |
+| Google Fonts (fallback only) | OFL staples when nothing above fits: Inter, Anton, Archivo Black, Permanent Marker, Caveat Brush, Space Mono |
 
-Workflow: `firecrawl_search "<style> font site:fontshare.com"` → `firecrawl_scrape` the font page for download link + license → `curl -L -o` → unzip `.ttf/.otf/.woff2` → register via `@font-face`/`FontFace` and **await `document.fonts.ready` before rendering frame 0**. Never ship a font whose license you couldn't verify.
+**3. Shortlist + approve:** 2–3 candidates per role in `plan/fonts.md` (name, site, page URL, license, weights, why it fits). Render a quick type specimen from code with the real headline and keywords from the script, pick the best, and show it with the style board for approval.
+
+**4. Download** only from the font's official page (never from mirror/"free download" sites): with Playwright click the download button (files land in `cache/browser/`), or Firecrawl-scrape the page for the direct link and `curl -L -o`. Unzip, then move the `.ttf/.otf/.woff2` files to `assets/fonts/<Family>/`. Save the license (the included LICENSE/readme, or the license page saved as `license.md`) in the same folder, and add a `manifest.json` entry for each family.
+
+**5. Use in code:** load the local files with `@font-face`/`FontFace` and **await `document.fonts.ready` before rendering frame 0**. Render a test still to make sure the right font shows (no fallback font, no missing glyphs).
+
+**License rules:** personal-use-only fonts are fine for the user's personal videos, but for client or commercial work you need a commercial license or a different font. If it's unclear, ask the user. Never use a font whose license you couldn't verify, and list every font in the credits.
 
 ## 13. Reference-video protocol (if the user attaches references, use them)
 
@@ -412,6 +479,7 @@ Always ask: *"Do you have a reference video or look? Attach it — I'll reverse-
 - [ ] Contact sheets checked over the full duration (§2b), no framing/overlap issues left
 - [ ] manifest.json licenses complete (no `reference-only` asset in the final without user OK); LOG.md updated; final saved as new version
 - [ ] Font licences saved next to the fonts in `assets/fonts/` and listed in the credits
+- [ ] Final render log saved in `renders/logs/` and linked in LOG.md; PROJECT.md, PROGRESS.md and manifest.json are up to date
 - [ ] No API key values in any log, manifest, script or rendered credit
 - [ ] Vertical/other aspect versions are native re-layouts (not crop/letterbox) and checked with contact sheets
 - [ ] PROGRESS.md marked `Phase: DONE` with final file path, specs and credits
@@ -419,9 +487,9 @@ Always ask: *"Do you have a reference video or look? Attach it — I'll reverse-
 
 ## 16. Visual asset hunting with the Playwright MCP (browse any site, grab assets yourself)
 
-Use this whenever the plan needs an image, texture, photo, footage clip, icon, mockup or style reference that the API MCPs (Pexels/Pixabay, LottieFiles, Freesound) don't cover well — e.g. Pinterest moodboards, Behance/Dribbble shots, brand sites, product pages, font specimen pages, free texture sites. **Do it yourself; don't ask the user to search.**
+Use this whenever the plan needs an image, texture, photo, footage clip, icon, mockup or style reference that the API MCPs (Pixabay/Unsplash, LottieFiles, Freesound) don't cover well — e.g. Pinterest moodboards, Behance/Dribbble shots, brand sites, product pages, font specimen pages, free texture sites. **Do it yourself; don't ask the user to search.**
 
-**Source order:** (1) API MCPs with clear licenses (Pexels/Pixabay/Lottie/Freesound) → (2) free-license sites browsed visually (Unsplash, Pexels web, Pixabay web, textures.com free, brand press kits, the user's own sites/socials) → (3) Pinterest/Behance/Dribbble/any site, mainly for **references and moodboards**, or for final use only when the original source's license allows it.
+**Source order:** (1) API MCPs with clear licenses (Pixabay/Unsplash/Lottie/Freesound) → (2) free-license sites browsed visually (Unsplash web, Pixabay web, textures.com free, brand press kits, the user's own sites/socials) → (3) Pinterest/Behance/Dribbble/any site, mainly for **references and moodboards**, or for final use only when the original source's license allows it.
 
 **Loop (per asset need):**
 1. **Write the brief first** (1 line in PROGRESS.md): what, where it's used, style (from the styleboard), aspect/size, and 3–5 search queries (vary wording: "lime green translucent keycap macro", "jelly keycap close up"…).

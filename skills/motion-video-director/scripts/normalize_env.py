@@ -7,11 +7,10 @@ MAP = [  # (regex on lowercased name, standard name) - first match wins
  (r'pixabay', 'PIXABAY_API_KEY'),
  (r'freesound.*(client.?id|\bid\b)', 'FREESOUND_CLIENT_ID'),
  (r'freesound', 'FREESOUND_API_KEY'),            # client secret / api key / token
- (r'pexels', 'PEXELS_API_KEY'),
+ (r'unsplash.*(app|application).*id', 'UNSPLASH_APPLICATION_ID'),
  (r'unsplash.*secret', 'UNSPLASH_SECRET_KEY'),
  (r'unsplash', 'UNSPLASH_ACCESS_KEY'),
  (r'firecrawl', 'FIRECRAWL_API_KEY'),
- (r'eleven', 'ELEVENLABS_API_KEY'),
 ]
 src = pathlib.Path(sys.argv[1]); dst = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else '.env')
 cur = {}

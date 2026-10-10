@@ -19,10 +19,10 @@ ls models 2>/dev/null | grep -qi sam2 && ok "model:SAM2" "models/" || no "model:
 [ -f .env ] && ok ".env" "present" || no ".env" "missing (API keys, see SKILL §0c)"
 grep -qsE '(^|/)\*?\.env$|^\.env' .gitignore && ok ".gitignore .env" "ignored" || no ".gitignore .env" "add .env to .gitignore"
 # key names only, values are never printed
-for k in PIXABAY_API_KEY FREESOUND_API_KEY FREESOUND_CLIENT_ID PEXELS_API_KEY UNSPLASH_ACCESS_KEY FIRECRAWL_API_KEY ELEVENLABS_API_KEY; do
+for k in PIXABAY_API_KEY FREESOUND_CLIENT_ID FREESOUND_API_KEY UNSPLASH_APPLICATION_ID UNSPLASH_ACCESS_KEY UNSPLASH_SECRET_KEY FIRECRAWL_API_KEY; do
   grep -qE "^$k=.+" .env 2>/dev/null && ok "key:$k" "set" || no "key:$k" "not set (optional unless needed)"
 done
 other=$(find . -maxdepth 3 -name "*.env" ! -path "./.env" ! -path "./node_modules/*" 2>/dev/null | head -5)
 [ -n "$other" ] && echo "ℹ️  other key files found (normalise into .env, SKILL §0c): $other"
 for c in claude codex uvx; do command -v $c >/dev/null 2>&1 && ok "cli:$c" "available" || no "cli:$c" "not found (only needed for that agent / uvx MCPs)"; done
-echo "MCPs (Playwright, Firecrawl, ElevenLabs, LottieFiles, Freesound, Pexels/Pixabay): verify via your agent's MCP tool list (e.g. 'claude mcp list', '/mcp'). Missing → SKILL §0b; no MCP → REST APIs in §0c."
+echo "MCPs (Playwright, Firecrawl, LottieFiles, Freesound, Pixabay/Unsplash): verify via your agent's MCP tool list (e.g. 'claude mcp list', '/mcp'). Missing → SKILL §0b; no MCP → REST APIs in §0c."

@@ -116,7 +116,7 @@ You approve the script, the plan and the preview before the final render. Progre
 | Color and layout | 60-30-10 color, WCAG contrast, safe zones for 9:16 platforms |
 | Sound | Risers, impacts and whooshes synced to the frame, ducking under voice, -14 LUFS / -1.5 dBTP |
 | Voiceover | ElevenLabs scripting, audio QA, word timestamps with faster-whisper |
-| Assets | Fonts, sound effects and stock footage via Firecrawl, Freesound, Pexels, Pixabay and LottieFiles. The agent can also browse sites like Pinterest and Behance with Playwright |
+| Assets | Fonts, sound effects and stock footage via Firecrawl, Freesound, Pixabay, Unsplash and LottieFiles. The agent can also browse sites like Pinterest and Behance with Playwright |
 
 ## Repository structure
 
@@ -138,7 +138,7 @@ skills/motion-video-director/
 
 Required: Node.js 18+, ffmpeg and ffprobe, and Playwright with headless Chrome.
 
-Optional: Python 3.10+ with `faster-whisper`, `rembg` and `demucs` for transcription, cutouts and stem separation. You can also add API keys or MCP servers for ElevenLabs, Firecrawl, Freesound, Pexels, Pixabay and LottieFiles.
+Optional: Python 3.10+ with `faster-whisper`, `rembg` and `demucs` for transcription, cutouts and stem separation. You can also add API keys or MCP servers for Firecrawl, Freesound, Pixabay, Unsplash and LottieFiles.
 
 To see what is installed and what is missing, run:
 
